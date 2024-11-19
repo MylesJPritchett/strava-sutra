@@ -1,0 +1,47 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  userId    Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  name           String
+  email          String    @unique
+  emailVerified  DateTime?
+  image          String?
+  hashedPassword String
+  accounts       Account[]
+  sessions       Session[]
+  posts          Post[]
+}
+
+model Account {
+  id                   Int       @id @default(autoincrement())
+  userId               Int
+  provider             String
+  providerAccountId    String
+  refresh_token        String?
+  access_token         String?
+  access_token_expires DateTime?
+  user                 User      @relation(fields: [userId], references: [id])
+}
+
+model Session {
+  id      Int      @id @default(autoincrement())
+  userId  Int
+  expires DateTime
+  user    User     @relation(fields: [userId], references: [id])
+}

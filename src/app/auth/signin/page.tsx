@@ -35,6 +35,7 @@ export default function Home() {
 
   return (
     <div className="container mx-auto p-4">
+Logged in
       {session ? (
         <>
           <p>Welcome, {session.user?.name || session.user?.email}</p>
